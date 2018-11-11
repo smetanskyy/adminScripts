@@ -102,11 +102,26 @@ do
 echo -e "$line count: `grep -c "$line" database`"
 sleep 2
 done < "temp"
-sleep 3
+sleep 2
 rm -f temp
 ;;
-2) echo -e "TWO"
-sleep 1
+2) all_cities=`awk '{print $6}' database | sort -d`
+for city in $all_cities;
+do
+if grep -i "$city" temp > /dev/null
+then
+continue
+else
+echo "$city" >> temp
+fi
+done
+while read line
+do
+echo -e "$line count: `awk '{print $6}' database | grep -c "$line"`"
+sleep 2
+done < "temp"
+sleep 2
+rm -f temp
 ;;
 3) echo -e "THEE"
 sleep 1
