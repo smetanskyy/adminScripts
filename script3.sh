@@ -87,8 +87,23 @@ ShowStatisticsMenu
 EnterChoice
 read choice
 case $choice in
-1) echo -e "ONE"
-sleep 1
+1) all_emails=`awk '{print $5}' database | grep -Eio "@[a-z]+\.[a-z]+" | grep -Eio "[a-z]+\.[a-z]+" | sort -d`
+for email in $all_emails;
+do
+if grep -i "$email" temp > /dev/null
+then
+continue
+else
+echo "$email" >> temp
+fi
+done
+while read line
+do
+echo -e "$line count: `grep -c "$line" database`"
+sleep 2
+done < "temp"
+sleep 3
+rm -f temp
 ;;
 2) echo -e "TWO"
 sleep 1
