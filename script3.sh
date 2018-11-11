@@ -88,6 +88,7 @@ EnterChoice
 read choice
 case $choice in
 1) all_emails=`awk '{print $5}' database | grep -Eio "@[a-z]+\.[a-z]+" | grep -Eio "[a-z]+\.[a-z]+" | sort -d`
+touch temp
 for email in $all_emails;
 do
 if grep -i "$email" temp > /dev/null
@@ -106,6 +107,7 @@ sleep 2
 rm -f temp
 ;;
 2) all_cities=`awk '{print $6}' database | sort -d`
+touch temp
 for city in $all_cities;
 do
 if grep -i "$city" temp > /dev/null
