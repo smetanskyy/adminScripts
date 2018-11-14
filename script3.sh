@@ -74,6 +74,8 @@ then
 continue
 else
 echo "$city" >> temp
+fi
+done
 echo "All cities:"
 tail temp
 echo "Enter a city: "
