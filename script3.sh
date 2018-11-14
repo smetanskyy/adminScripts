@@ -52,23 +52,46 @@ EnterChoice
 read choice
 case $choice in
 1) echo -e "EMAILS:"
-awk '{print $5}' database
-sleep 5
+echo -e "Enter a kind of email (gmail.com etc):"
+read mail
+grep -i "@$mail  " database
+sleep 4
 ;;
 2) echo -e "PHONES:"
-awk '{print $4}' database
-sleep 5
+echo -e "Enter a kind of operator (067 or 050 .. etc):"
+read phone
+grep -iE "   ($phone)[0-9]+" database
+sleep 4
 ;;
 3) echo -e "CITIES:"
-awk '{print $6}' database
-sleep 5
+#awk '{print $6}' database
+cities=`awk '{print $6}' database | sort -d`
+touch temp
+for city in $cities;
+do
+if grep -i "$city" temp > /dev/null
+then
+continue
+else
+echo "$city" >> temp
+echo "All cities:"
+tail temp
+echo "Enter a city: "
+read city
+grep -i "  $city" temp
+rm -f temp
+sleep 4
 ;;
 4) echo -e "NAMES: "
-awk '{print $1}' database
+echo "Enter name: "
+read name
+grep -i "$name  " database
 sleep 5
 ;;
 5) echo -e "SURNAME: "
-awk '{print $2}' database
+echo "Enter surname: "
+read surname
+grep -i "  $surname  " database
 sleep 5
 ;;
 6) echo -en "${SEA_COLOUR}You are coming back!$NORMAL"
@@ -125,11 +148,47 @@ done < "temp"
 sleep 2
 rm -f temp
 ;;
-3) echo -e "THEE"
-sleep 1
+3) echo -e "Age untill 19 years: "
+echo -n "count: "
+grep -c "   1[0-9]   " database
+
+echo -e "Age 20 - 39 years: "
+echo -n "count: "
+grep -c "   [2-3][0-9]   " database
+
+echo -e "Age 40 - 59 years: "
+echo -n "count: "
+grep -c "   [4-5][0-9]   " database
+
+echo -e "Age 60 - 99 years: "
+echo -n "count: "
+grep -c "   [6-9][0-9]   " database
+
+echo -e "Age 100 and more years: "
+echo -n "count: "
+grep -c "   [1-9][0-9][0-9]   " database
+
+sleep 4
 ;;
-4) echo -e "FOUR"
-sleep 1
+4) echo -e "The same phone operator"
+all_operators=`awk '{print $4}' database | grep -Eio "([0-9]+)" | grep -Eio "[0-9]+" | sort -d`
+touch temp
+for operator in $all_operators;
+do
+if grep -i "$operator" temp > /dev/null
+then
+continue
+else
+echo "$operator" >> temp
+fi
+done
+while read line
+do
+echo -e "$line count: `grep -c "($line)" database`"
+sleep 2
+done < "temp"
+sleep 2
+rm -f temp
 ;;
 5) echo -en "You are coming back"
 sleep 1
