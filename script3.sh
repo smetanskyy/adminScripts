@@ -51,19 +51,22 @@ ShowSearchMenu
 EnterChoice
 read choice
 case $choice in
-1) echo -e "EMAILS:"
+1) clear 
+echo -e "EMAILS:"
 echo -e "Enter a kind of email (gmail.com etc):"
 read mail
 grep -i "@$mail  " database
 sleep 4
 ;;
-2) echo -e "PHONES:"
+2) clear
+echo -e "PHONES:"
 echo -e "Enter a kind of operator (067 or 050 .. etc):"
 read phone
 grep -iE "   \($phone\)[0-9]+" database
 sleep 4
 ;;
-3) echo -e "CITIES:"
+3) clear
+echo -e "CITIES:"
 #awk '{print $6}' database
 cities=`awk '{print $6}' database | sort -d`
 touch temp
@@ -80,21 +83,23 @@ echo "All cities:"
 cat < temp
 echo "Enter a city: "
 read city
-grep -i "  $city" temp
+grep -i "  $city" database
 rm -f temp
 sleep 4
 ;;
-4) echo -e "NAMES: "
+4) clear
+echo -e "NAMES: "
 echo "Enter name: "
 read name
 grep -i "$name  " database
-sleep 5
+sleep 4
 ;;
-5) echo -e "SURNAME: "
+5) clear
+echo -e "SURNAME: "
 echo "Enter surname: "
 read surname
 grep -i "  $surname  " database
-sleep 5
+sleep 4
 ;;
 6) echo -en "${SEA_COLOUR}You are coming back!$NORMAL"
 sleep 1
@@ -112,7 +117,8 @@ ShowStatisticsMenu
 EnterChoice
 read choice
 case $choice in
-1) all_emails=`awk '{print $5}' database | grep -Eio "@[a-z]+\.[a-z]+" | grep -Eio "[a-z]+\.[a-z]+" | sort -d`
+1) clear
+all_emails=`awk '{print $5}' database | grep -Eio "@[a-z]+\.[a-z]+" | grep -Eio "[a-z]+\.[a-z]+" | sort -d`
 touch temp
 for email in $all_emails;
 do
@@ -126,12 +132,13 @@ done
 while read line
 do
 echo -e "$line count: `grep -c "$line" database`"
-sleep 2
+sleep 1
 done < "temp"
 sleep 2
 rm -f temp
 ;;
-2) all_cities=`awk '{print $6}' database | sort -d`
+2) clear
+all_cities=`awk '{print $6}' database | sort -d`
 touch temp
 for city in $all_cities;
 do
@@ -145,12 +152,13 @@ done
 while read line
 do
 echo -e "$line count: `awk '{print $6}' database | grep -c "$line"`"
-sleep 2
+sleep 1 
 done < "temp"
 sleep 2
 rm -f temp
 ;;
-3) echo -e "Age untill 19 years: "
+3) clear
+echo -e "Age untill 19 years: "
 echo -n "count: "
 grep -c "   1[0-9]   " database
 
@@ -172,7 +180,8 @@ grep -c "   [1-9][0-9][0-9]   " database
 
 sleep 4
 ;;
-4) echo -e "The same phone operator"
+4) clear
+echo -e "The same phone operator"
 all_operators=`awk '{print $4}' database | grep -Eio "\([0-9]+\)" | grep -Eio "[0-9]+" | sort -d`
 touch temp
 for operator in $all_operators;
@@ -187,7 +196,7 @@ done
 while read line
 do
 echo -e "$line count: `grep -c "($line)" database`"
-sleep 2
+sleep 1
 done < "temp"
 sleep 2
 rm -f temp
