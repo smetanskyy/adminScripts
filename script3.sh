@@ -60,7 +60,7 @@ sleep 4
 2) echo -e "PHONES:"
 echo -e "Enter a kind of operator (067 or 050 .. etc):"
 read phone
-grep -iE "   ($phone)[0-9]+" database
+grep -iE "   \($phone\)[0-9]+" database
 sleep 4
 ;;
 3) echo -e "CITIES:"
@@ -77,7 +77,7 @@ echo "$city" >> temp
 fi
 done
 echo "All cities:"
-tail temp
+cat < temp
 echo "Enter a city: "
 read city
 grep -i "  $city" temp
@@ -173,7 +173,7 @@ grep -c "   [1-9][0-9][0-9]   " database
 sleep 4
 ;;
 4) echo -e "The same phone operator"
-all_operators=`awk '{print $4}' database | grep -Eio "([0-9]+)" | grep -Eio "[0-9]+" | sort -d`
+all_operators=`awk '{print $4}' database | grep -Eio "\([0-9]+\)" | grep -Eio "[0-9]+" | sort -d`
 touch temp
 for operator in $all_operators;
 do
